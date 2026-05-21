@@ -1,0 +1,24 @@
+# ─── Secretos ────────────────────────────────────────────────────────────────
+firmware/fitcore_security/secrets.h
+app/.env
+app/.env.local
+simulados/.env
+
+# ─── Node / Expo ──────────────────────────────────────────────────────────────
+node_modules/
+app/node_modules/
+simulados/node_modules/
+.expo/
+dist/
+*.log
+npm-debug.log*
+
+# ─── Arduino / IDE ────────────────────────────────────────────────────────────
+*.elf
+*.bin
+*.hex
+build/
+
+# ─── OS ──────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db

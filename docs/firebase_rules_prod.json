@@ -1,0 +1,19 @@
+{
+  "rules": {
+
+    "_comentario": "Semana 6+: requiere Firebase Auth. Activar cuando la app tenga login.",
+
+    "sensor": {
+      ".read":  "auth != null",
+      ".write": "auth != null"
+    },
+    "config": {
+      ".read":  "auth != null",
+      ".write": "auth != null"
+    },
+    "alertas": {
+      ".read":  "auth != null",
+      ".write": "auth != null"
+    }
+  }
+}
