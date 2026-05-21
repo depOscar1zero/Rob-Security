@@ -1,0 +1,19 @@
+{
+  "rules": {
+
+    "_comentario": "Semanas 1-4: modo test abierto para desarrollo rápido",
+
+    "sensor": {
+      ".read":  true,
+      ".write": true
+    },
+    "config": {
+      ".read":  true,
+      ".write": true
+    },
+    "alertas": {
+      ".read":  true,
+      ".write": true
+    }
+  }
+}
