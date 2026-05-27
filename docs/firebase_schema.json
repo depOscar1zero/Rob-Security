@@ -1,28 +1,29 @@
 {
-  "_comentario": "FitCore IoT — Firebase Realtime Database schema",
+  "_comentario": "FitCore IoT — Firebase Realtime Database schema v1.1 (PIR)",
 
   "sensor": {
-    "distancia_cm": 0.0,
+    "movimiento": false,
     "alerta": false,
     "estado": "armado",
     "timestamp": 0
   },
 
   "config": {
-    "armado": true,
-    "umbral": 120
+    "armado": true
   },
 
   "alertas": {
     "-NxPushId1": {
       "tipo": "alerta",
-      "distancia_cm": 85.3,
       "timestamp": 1716200000
     },
     "-NxPushId2": {
       "tipo": "alarma",
-      "distancia_cm": 42.1,
       "timestamp": 1716200004
+    },
+    "-NxPushId3": {
+      "tipo": "despejado",
+      "timestamp": 1716200025
     }
   }
 }
