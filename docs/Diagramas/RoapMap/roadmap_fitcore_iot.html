@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roadmap — FitCore IoT Seguridad v1.1</title>
+<style>
+:root {
+  --bg:#f4f3ef; --card:#fff; --border:#e2e0da; --text:#1a1a18; --muted:#6b6b66;
+  --ph1:#7c3aed; --ph1l:#ede9fe; --ph1d:#5b21b6;
+  --ph2:#0d9488; --ph2l:#ccfbf1; --ph2d:#065f46;
+  --ph3:#2563eb; --ph3l:#dbeafe; --ph3d:#1e3a8a;
+  --ph4:#d97706; --ph4l:#fef3c7; --ph4d:#78350f;
+  --ph5:#dc2626; --ph5l:#fee2e2; --ph5d:#7f1d1d;
+  --ph6:#16a34a; --ph6l:#dcfce7; --ph6d:#14532d;
+  --m1:#7c3aed; --m1l:#ede9fe;
+  --m2:#0d9488; --m2l:#ccfbf1;
+  --m3:#2563eb; --m3l:#dbeafe;
+  --al:#475569; --all:#f1f5f9;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;}
+.hdr{background:#15140f;color:#fff;padding:36px 44px 28px;}
+.hdr h1{font-size:24px;font-weight:700;letter-spacing:-0.4px;}
+.hdr h1 em{color:#a78bfa;font-style:normal;}
+.hdr p{color:#8a8880;font-size:13px;margin-top:4px;}
+.stats{display:flex;gap:36px;margin-top:24px;}
+.stat-val{font-size:30px;font-weight:700;color:#fff;line-height:1;}
+.stat-lbl{font-size:11px;color:#5a5a55;text-transform:uppercase;letter-spacing:0.6px;margin-top:3px;}
+.wrap{max-width:860px;margin:0 auto;padding:32px 20px 48px;}
+.start-box{background:#15140f;border-radius:12px;padding:22px 26px;margin-bottom:28px;}
+.start-box h2{font-size:11px;font-weight:700;color:#a78bfa;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:14px;}
+.start-task{display:flex;align-items:flex-start;gap:11px;background:#232118;border-radius:8px;padding:12px 14px;margin-bottom:8px;}
+.start-task:last-child{margin-bottom:0;}
+.sn{width:22px;height:22px;border-radius:50%;background:#a78bfa;color:#15140f;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.st{font-size:13px;color:#d4d2ca;}
+.st strong{color:#fff;}
+.st code{background:#322f26;padding:1px 5px;border-radius:3px;font-family:Consolas,monospace;font-size:11px;color:#a78bfa;}
+.legend{display:flex;flex-wrap:wrap;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 18px;margin-bottom:20px;}
+.li{display:flex;align-items:center;gap:8px;font-size:12.5px;}
+.tag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;flex-shrink:0;}
+.pbar{display:flex;gap:3px;height:34px;border-radius:8px;overflow:hidden;margin-bottom:14px;}
+.ps{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:#fff;flex:1;}
+.ps1{background:var(--ph1);} .ps2{background:var(--ph2);} .ps3{background:var(--ph3);}
+.ps4{background:var(--ph4);} .ps5{background:var(--ph5);} .ps6{background:var(--ph6);}
+.prog-wrap{background:var(--border);border-radius:4px;height:5px;margin-bottom:6px;overflow:hidden;}
+.prog-fill{height:100%;background:#a78bfa;border-radius:4px;transition:width 0.35s ease;}
+.prog-lbl{font-size:11px;color:var(--muted);margin-bottom:28px;}
+.ph{display:flex;align-items:center;gap:10px;margin:28px 0 10px;}
+.ph-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.ph h2{font-size:15px;font-weight:600;}
+.wbadge{font-size:11px;color:var(--muted);background:var(--border);padding:2px 9px;border-radius:20px;}
+.wc{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:8px;overflow:hidden;}
+.wch{display:flex;align-items:center;gap:9px;padding:13px 16px;cursor:pointer;user-select:none;}
+.wch:hover{background:#faf9f7;}
+.wn{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;flex-shrink:0;}
+.wt{font-size:13.5px;font-weight:600;flex:1;}
+.wm{font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;flex-shrink:0;}
+.chv{font-size:11px;color:var(--muted);transition:transform 0.18s;flex-shrink:0;}
+.wc.open .chv{transform:rotate(90deg);}
+.wcb{display:none;padding:0 16px 16px;border-top:1px solid var(--border);}
+.wc.open .wcb{display:block;}
+.tg{margin-top:12px;}
+.tgl{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;}
+.tr{display:flex;align-items:flex-start;gap:9px;padding:8px 0;border-bottom:1px solid #f0efe9;}
+.tr:last-child{border-bottom:none;}
+.tr input[type=checkbox]{margin-top:3px;cursor:pointer;accent-color:#a78bfa;width:14px;height:14px;flex-shrink:0;}
+.tt{font-size:13px;color:#2a2a28;}
+.tt code{background:#f2f1ea;padding:1px 5px;border-radius:3px;font-family:Consolas,monospace;font-size:11px;color:#444;}
+.tip{display:block;font-size:11px;color:var(--muted);margin-top:3px;}
+.mb{margin-top:14px;padding:10px 13px;border-radius:8px;font-size:13px;}
+.changed{background:#fef3c7;border:1px solid #d97706;border-radius:6px;padding:3px 7px;font-size:10px;font-weight:700;color:#92400e;margin-left:6px;vertical-align:middle;}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:8px;margin-top:8px;}
+.tc{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 14px;}
+.tc h4{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.4px;margin-bottom:8px;}
+.ti{font-size:12px;color:var(--text);padding:2px 0;}
+.ti code{font-family:Consolas,monospace;background:#f2f1ea;padding:1px 5px;border-radius:3px;font-size:11px;}
+footer{text-align:center;font-size:11px;color:var(--muted);padding:20px;}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <h1>FitCore IoT — <em>Sistema de Seguridad</em></h1>
+  <p>Roadmap v1.1 · HC-SR501 PIR + NodeMCU ESP8266 + Firebase · Repo: GitHub ✓</p>
+  <div class="stats">
+    <div><div class="stat-val">10</div><div class="stat-lbl">Semanas</div></div>
+    <div><div class="stat-val">3</div><div class="stat-lbl">Integrantes</div></div>
+    <div><div class="stat-val">5</div><div class="stat-lbl">Milestones</div></div>
+    <div><div class="stat-val" id="pcnt">0/38</div><div class="stat-lbl">Tareas hechas</div></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="start-box">
+    <h2>▶ Por dónde seguir ahora (S1 en curso)</h2>
+    <div class="start-task">
+      <div class="sn">1</div>
+      <div class="st"><strong>M2 — Crear proyecto Firebase</strong> · Realtime Database en modo test. Compartir URL del RTDB y Web API Key vía <code>.env</code> con M1. Este paso desbloquea todo lo demás.</div>
+    </div>
+    <div class="start-task">
+      <div class="sn">2</div>
+      <div class="st"><strong>M1 — Conectar HC-SR501 y probar en serial</strong> · VCC→VIN, OUT→D2, GND→GND. Verificar que <code>digitalRead(D2)</code> cambia al mover la mano frente al sensor. Sin WiFi todavía.</div>
+    </div>
+    <div class="start-task">
+      <div class="sn">3</div>
+      <div class="st"><strong>M3 — Crear proyecto Expo</strong> · <code>npx create-expo-app app</code> · <code>npm install firebase</code> · Probar en teléfono Android con Expo Go. Solo scaffold por ahora.</div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="li"><span class="tag" style="background:var(--m1l);color:var(--m1)">M1</span>Hardware · Firmware (C++ / Arduino IDE)</div>
+    <div class="li"><span class="tag" style="background:var(--m2l);color:var(--m2)">M2</span>Backend · Firebase · APIs · Cloud</div>
+    <div class="li"><span class="tag" style="background:var(--m3l);color:var(--m3)">M3</span>Frontend · App Android · Dispositivos sim.</div>
+    <div class="li"><span class="tag" style="background:var(--all);color:var(--al)">TODOS</span>Tarea del equipo completo</div>
+  </div>
+
+  <div class="pbar">
+    <div class="ps ps1">S1–2 Fundación</div>
+    <div class="ps ps2">S3–4 Núcleo IoT</div>
+    <div class="ps ps3">S5–6 App Android</div>
+    <div class="ps ps4">S7–8 Simulados</div>
+    <div class="ps ps5">S9 Tests</div>
+    <div class="ps ps6">S10 Entrega</div>
+  </div>
+  <div class="prog-wrap"><div class="prog-fill" id="pfill" style="width:0%"></div></div>
+  <p class="prog-lbl" id="plbl">0 % completado</p>
+
+  <!-- FASE 1 -->
+  <div class="ph">
+    <div class="ph-dot" style="background:var(--ph1)"></div>
+    <h2>Fase 1 — Fundación</h2>
+    <span class="wbadge">Semanas 1–2</span>
+  </div>
+
+  <div class="wc" id="w1">
+    <div class="wch" onclick="tog('w1')">
+      <span class="wn" style="background:var(--ph1l);color:var(--ph1)">S1</span>
+      <span class="wt">Setup del entorno y estructura base <span class="changed">Repo ✓</span></span>
+      <span class="chv">▶</span>
+    </div>
+    <div class="wcb">
+      <div class="tg">
+        <div class="tgl" style="color:var(--al)">Equipo</div>
+        <div class="tr"><input type="checkbox" onchange="upd()" checked><span class="tag" style="background:var(--all);color:var(--al)">TODOS</span><div class="tt">Repo GitHub creado con estructura <code>/firmware</code> <code>/app</code> <code>/simulados</code> <code>/docs</code> y ramas <code>main</code> / <code>develop</code>. ✅ Completado</div></div>
+        <div class="tr"><input type="checkbox" onchange="upd()" checked><span class="tag" style="background:var(--all);color:var(--al)">TODOS</span><div class="tt">Reunión de kickoff y asignación de roles M1 / M2 / M3. ✅ Completado</div></div>
+      </div>
+      <div class="tg">
+        <div class="tgl" style="color:var(--m1)">M1 — Hardware <span class="changed">PIR v1.1</span></div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--m1l);color:var(--m1)">M1</span><div class="tt">Instalar Arduino IDE 2.x + board package ESP8266 + librería <code>ArduinoJson</code>.<span class="tip">Board manager URL: http://arduino.esp8266.com/stable/package_esp8266com_index.json</span></div></div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--m1l);color:var(--m1)">M1</span><div class="tt">Conectar HC-SR501: VCC→VIN (5V), OUT→D2, GND→GND. Verificar señal en Serial Monitor. Sin divisor de voltaje necesario.<span class="tip">Pasar la mano frente al sensor y observar HIGH/LOW en Serial Monitor a 115200 baud.</span></div></div>
+      </div>
+      <div class="tg">
+        <div class="tgl" style="color:var(--m2)">M2 — Backend</div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--m2l);color:var(--m2)">M2</span><div class="tt">Crear proyecto Firebase → habilitar Realtime Database en modo test.<span class="tip">console.firebase.google.com → Add project → Realtime Database → Start in test mode</span></div></div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--m2l);color:var(--m2)">M2</span><div class="tt">Documentar schema RTDB en <code>/docs/firebase_schema.json</code>. Nodos: <code>/sensor</code> <code>/config/armado</code> <code>/alertas</code>.<span class="tip">El schema v1.1 ya no tiene distancia_cm. Campo clave: movimiento (bool) + estado (string).</span></div></div>
+      </div>
+      <div class="tg">
+        <div class="tgl" style="color:var(--m3)">M3 — App Android</div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--m3l);color:var(--m3)">M3</span><div class="tt">Instalar Node.js + Expo CLI. Crear proyecto: <code>npx create-expo-app app</code> + <code>npm install firebase</code>. Probar en Android con Expo Go.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wc" id="w2">
+    <div class="wch" onclick="tog('w2')">
+      <span class="wn" style="background:var(--ph1l);color:var(--ph1)">S2</span>
+      <span class="wt">Primer dato PIR en Firebase</span>
+      <span class="wm" style="background:var(--ph1l);color:var(--ph1d)">🎯 Milestone 1</span>
+      <span class="chv">▶</span>
+    </div>
+    <div class="wcb">
+      <div class="tg">
+        <div class="tgl" style="color:var(--m1)">M1 — Firmware <span class="changed">PIR v1.1</span></div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--m1l);color:var(--m1)">M1</span><div class="tt">Firmware fase local: leer HC-SR501 cada 100 ms → encender buzzer si <code>HIGH</code>. Validar en serial monitor. Sin WiFi todavía.<span class="tip">Estado ALARM cuando digitalRead(D2)==HIGH sostenido 3 s. Ver máquina de estados en el .ino.</span></div></div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--m1l);color:var(--m1)">M1</span><div class="tt">Conectar WiFi y hacer primer POST a Firebase: <code>{"movimiento": true, "estado": "alarma"}</code>. Verificar en consola que el dato llega.<span class="tip">Copiar secrets.h.example → secrets.h, rellenar FIREBASE_HOST y FIREBASE_API_KEY que provea M2.</span></div></div>
+      </div>
+      <div class="tg">
+        <div class="tgl" style="color:var(--m2)">M2 — Backend</div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--m2l);color:var(--m2)">M2</span><div class="tt">Compartir credenciales con M1 y M3 vía archivo <code>.env</code> (nunca al repo). Confirmar en consola Firebase que los datos llegan cada ~1 s.</div></div>
+      </div>
+      <div class="tg">
+        <div class="tgl" style="color:var(--m3)">M3 — App</div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--m3l);color:var(--m3)">M3</span><div class="tt">App lee <code>/sensor/movimiento</code> desde Firebase y lo muestra en pantalla en tiempo real (solo texto, sin UI pulida).<span class="tip">Usar onValue() del SDK de Firebase Web v9. Documentación: firebase.google.com/docs/database/web/read-and-write</span></div></div>
+      </div>
+      <div class="mb" style="background:var(--ph1l);color:var(--ph1d)">🎯 <strong>Milestone 1:</strong> ESP8266 detecta movimiento con PIR → escribe en Firebase → app Android lo lee en tiempo real. Pipeline completo funcionando.</div>
+    </div>
+  </div>
+
+  <!-- FASE 2 -->
+  <div class="ph">
+    <div class="ph-dot" style="background:var(--ph2)"></div>
+    <h2>Fase 2 — Núcleo IoT</h2>
+    <span class="wbadge">Semanas 3–4</span>
+  </div>
+
+  <div class="wc" id="w3">
+    <div class="wch" onclick="tog('w3')">
+      <span class="wn" style="background:var(--ph2l);color:var(--ph2)">S3</span>
+      <span class="wt">Máquina de estados y lógica de alarma <span class="changed">PIR v1.1</span></span>
+      <span class="chv">▶</span>
+    </div>
+    <div class="wcb">
+      <div class="tg">
+        <div class="tgl" style="color:var(--m1)">M1 — Hardware</div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--m1l);color:var(--m1)">M1</span><div class="tt">Validar máquina de estados completa en hardware real: WARMUP (30 s) → ARMED → ALERT → ALARM → despejado → ARMED. Probar cada transición.<span class="tip">El HC-SR501 mantiene HIGH ~2 s después del último movimiento. Esto es normal, no es un bug.</span></div></div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--m1l);color:var(--m1)">M1</span><div class="tt">Firmware lee <code>/config/armado</code> de Firebase cada 2 s para obedecer armar/desarmar remoto desde la app.</div></div>
+      </div>
+      <div class="tg">
+        <div class="tgl" style="color:var(--m2)">M2 — Backend</div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--m2l);color:var(--m2)">M2</span><div class="tt">Cada evento se registra en <code>/alertas/{pushId}</code> con <code>tipo</code> ("alerta" | "alarma" | "despejado") y <code>timestamp</code>.<span class="tip">El firmware hace POST a /alertas.json que genera automáticamente el pushId único de Firebase.</span></div></div>
+      </div>
+      <div class="tg">
+        <div class="tgl" style="color:var(--m3)">M3 — App</div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--m3l);color:var(--m3)">M3</span><div class="tt">Indicador visual de estado: círculo grande con colores. Verde = armado, amarillo = alerta, rojo = alarma, gris = desarmado.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wc" id="w4">
+    <div class="wch" onclick="tog('w4')">
+      <span class="wn" style="background:var(--ph2l);color:var(--ph2)">S4</span>
+      <span class="wt">Sistema base de punta a punta</span>
+      <span class="wm" style="background:var(--ph2l);color:var(--ph2d)">🎯 Milestone 2</span>
+      <span class="chv">▶</span>
+    </div>
+    <div class="wcb">
+      <div class="tg">
+        <div class="tgl" style="color:var(--al)">M1 + M2 — Integración</div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--all);color:var(--al)">M1+M2</span><div class="tt">Prueba integrada: PIR detecta → máquina de estados → Firebase actualiza estado + historial. Medir latencia (meta: &lt; 2 s).</div></div>
+      </div>
+      <div class="tg">
+        <div class="tgl" style="color:var(--m3)">M3 — App</div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--m3l);color:var(--m3)">M3</span><div class="tt">Historial de eventos: lista con hora, tipo de evento (alerta / alarma / despejado). Ordenado por más reciente.</div></div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--m3l);color:var(--m3)">M3</span><div class="tt">Botón "Armar / Desarmar" en la app que escribe en <code>/config/armado</code> de Firebase.</div></div>
+      </div>
+      <div class="mb" style="background:var(--ph2l);color:var(--ph2d)">🎯 <strong>Milestone 2:</strong> Sistema completo. PIR → Firebase → app muestra estado + historial → app puede armar/desarmar remotamente.</div>
+    </div>
+  </div>
+
+  <!-- FASE 3 -->
+  <div class="ph">
+    <div class="ph-dot" style="background:var(--ph3)"></div>
+    <h2>Fase 3 — App Android completa</h2>
+    <span class="wbadge">Semanas 5–6</span>
+  </div>
+
+  <div class="wc" id="w5">
+    <div class="wch" onclick="tog('w5')">
+      <span class="wn" style="background:var(--ph3l);color:var(--ph3)">S5</span>
+      <span class="wt">Notificaciones push y control remoto</span>
+      <span class="chv">▶</span>
+    </div>
+    <div class="wcb">
+      <div class="tg">
+        <div class="tgl" style="color:var(--m2)">M2 — Backend</div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--m2l);color:var(--m2)">M2</span><div class="tt">Habilitar Firebase Cloud Messaging (FCM). Obtener Server Key.<span class="tip">Firebase Console → Project Settings → Cloud Messaging → Server key</span></div></div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--m2l);color:var(--m2)">M2</span><div class="tt">Cloud Function (Node.js): se dispara en <code>onValueCreated("/alertas/{id}")</code> → llama FCM API → push al teléfono Android.<span class="tip">El tipo "alerta" manda push silencioso; "alarma" manda push con sonido y alta prioridad.</span></div></div>
+      </div>
+      <div class="tg">
+        <div class="tgl" style="color:var(--m3)">M3 — App</div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--m3l);color:var(--m3)">M3</span><div class="tt">Integrar <code>expo-notifications</code>: recibir push con app en segundo plano o cerrada. Guardar FCM token en Firebase.<span class="tip">expo install expo-notifications · Pedir permisos con requestPermissionsAsync() al arrancar la app.</span></div></div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--m3l);color:var(--m3)">M3</span><div class="tt">Vibración + sonido de alerta en el teléfono al recibir notificación de alarma.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wc" id="w6">
+    <div class="wch" onclick="tog('w6')">
+      <span class="wn" style="background:var(--ph3l);color:var(--ph3)">S6</span>
+      <span class="wt">UI pulida y autenticación</span>
+      <span class="wm" style="background:var(--ph3l);color:var(--ph3d)">🎯 Milestone 3</span>
+      <span class="chv">▶</span>
+    </div>
+    <div class="wcb">
+      <div class="tg">
+        <div class="tgl" style="color:var(--m3)">M3 — App</div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--m3l);color:var(--m3)">M3</span><div class="tt">Dashboard: estado actual (círculo grande), última detección, contador de alarmas del día, botón armar/desarmar.</div></div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--m3l);color:var(--m3)">M3</span><div class="tt">Pantalla de historial con lista de eventos y opción de borrar historial.</div></div>
+      </div>
+      <div class="tg">
+        <div class="tgl" style="color:var(--m2)">M2 — Backend</div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--m2l);color:var(--m2)">M2</span><div class="tt">Activar Firebase Auth (email/password). Cambiar reglas RTDB de modo test a autenticado.<span class="tip">Usar firebase_rules_prod.json del repo. Todas las lecturas/escrituras requieren auth != null.</span></div></div>
+      </div>
+      <div class="mb" style="background:var(--ph3l);color:var(--ph3d)">🎯 <strong>Milestone 3:</strong> App Android completa: dashboard, historial, push notifications y autenticación activa.</div>
+    </div>
+  </div>
+
+  <!-- FASE 4 -->
+  <div class="ph">
+    <div class="ph-dot" style="background:var(--ph4)"></div>
+    <h2>Fase 4 — Dispositivos simulados</h2>
+    <span class="wbadge">Semanas 7–8</span>
+  </div>
+
+  <div class="wc" id="w7">
+    <div class="wch" onclick="tog('w7')">
+      <span class="wn" style="background:var(--ph4l);color:var(--ph4)">S7</span>
+      <span class="wt">Smartwatch y Smart TV</span>
+      <span class="chv">▶</span>
+    </div>
+    <div class="wcb">
+      <div class="tg">
+        <div class="tgl" style="color:var(--m3)">M3 — Frontend simulados</div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--m3l);color:var(--m3)">M3</span><div class="tt">Panel Smartwatch: página HTML circular (250×250 px). Conecta a Firebase vía SDK (WebSocket). Muestra estado + ícono de candado + hora de última detección.<span class="tip">Abrir en navegador a 250×250 px. Al detectar "alarma" el fondo parpadea en rojo.</span></div></div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--m3l);color:var(--m3)">M3</span><div class="tt">Panel Smart TV: HTML full-screen estilo centro de monitoreo. REST polling a Firebase cada 5 s. Historial reciente en lista lateral.<span class="tip">Usar fetch() a https://proyecto-default-rtdb.firebaseio.com/sensor.json cada 5 s.</span></div></div>
+      </div>
+      <div class="tg">
+        <div class="tgl" style="color:var(--m1)">M1 — Documentación circuito</div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--m1l);color:var(--m1)">M1</span><div class="tt">Documentar circuito final: foto del protoboard montado + tabla de pines HC-SR501 y buzzer. Guardar en <code>/docs/</code>.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wc" id="w8">
+    <div class="wch" onclick="tog('w8')">
+      <span class="wn" style="background:var(--ph4l);color:var(--ph4)">S8</span>
+      <span class="wt">Asistente de voz y pulido de simulados</span>
+      <span class="wm" style="background:var(--ph4l);color:var(--ph4d)">🎯 Milestone 4</span>
+      <span class="chv">▶</span>
+    </div>
+    <div class="wcb">
+      <div class="tg">
+        <div class="tgl" style="color:var(--m2)">M2 — Backend</div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--m2l);color:var(--m2)">M2</span><div class="tt">Configurar IFTTT Webhook: Cloud Function llama webhook al crearse nueva alarma → Google Assistant broadcast "¡Intrusión detectada en el garaje!".<span class="tip">IFTTT: If Webhooks (event: "intruso_detectado") Then Google Assistant (broadcast message)</span></div></div>
+      </div>
+      <div class="tg">
+        <div class="tgl" style="color:var(--m3)">M3 — Frontend</div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--m3l);color:var(--m3)">M3</span><div class="tt">Animación de alarma en Smartwatch y Smart TV: parpadeo rojo + texto "INTRUSO DETECTADO" al recibir estado "alarma".</div></div>
+      </div>
+      <div class="tg">
+        <div class="tgl" style="color:var(--al)">Equipo</div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--all);color:var(--al)">TODOS</span><div class="tt">Grabar video corto de cada dispositivo funcionando por separado. Guardar en <code>/docs/evidencias/</code>.</div></div>
+      </div>
+      <div class="mb" style="background:var(--ph4l);color:var(--ph4d)">🎯 <strong>Milestone 4:</strong> Los 4 dispositivos alertan correctamente: app Android, smartwatch, Smart TV y asistente de voz.</div>
+    </div>
+  </div>
+
+  <!-- FASE 5 -->
+  <div class="ph">
+    <div class="ph-dot" style="background:var(--ph5)"></div>
+    <h2>Fase 5 — Integración y pruebas</h2>
+    <span class="wbadge">Semana 9</span>
+  </div>
+
+  <div class="wc" id="w9">
+    <div class="wch" onclick="tog('w9')">
+      <span class="wn" style="background:var(--ph5l);color:var(--ph5)">S9</span>
+      <span class="wt">Prueba end-to-end y corrección de bugs</span>
+      <span class="wm" style="background:var(--ph5l);color:var(--ph5d)">🎯 Milestone 5</span>
+      <span class="chv">▶</span>
+    </div>
+    <div class="wcb">
+      <div class="tg">
+        <div class="tgl" style="color:var(--al)">Equipo completo</div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--all);color:var(--al)">TODOS</span><div class="tt">Prueba de escenario 5 veces seguidas: simular intrusión (mano frente al PIR) → verificar que los 4 dispositivos alertan. Meta: latencia &lt; 3 s.</div></div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--all);color:var(--al)">TODOS</span><div class="tt">Documentar latencia real medida (tiempo desde detección PIR → notificación en app). Incluir en el reporte.</div></div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--all);color:var(--al)">TODOS</span><div class="tt">Lista de bugs → priorizar → resolver los críticos. Hacer PR a <code>main</code> con el código final.</div></div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--all);color:var(--al)">TODOS</span><div class="tt">Grabar video demo completo del sistema. Plan B para si el WiFi de la clase falla durante la presentación.</div></div>
+      </div>
+      <div class="mb" style="background:var(--ph5l);color:var(--ph5d)">🎯 <strong>Milestone 5:</strong> Sistema integrado y probado. Video demo listo. Código limpio en <code>main</code>.</div>
+    </div>
+  </div>
+
+  <!-- FASE 6 -->
+  <div class="ph">
+    <div class="ph-dot" style="background:var(--ph6)"></div>
+    <h2>Fase 6 — Entrega final</h2>
+    <span class="wbadge">Semana 10</span>
+  </div>
+
+  <div class="wc" id="w10">
+    <div class="wch" onclick="tog('w10')">
+      <span class="wn" style="background:var(--ph6l);color:var(--ph6)">S10</span>
+      <span class="wt">Código limpio en GitHub y demo en vivo</span>
+      <span class="wm" style="background:var(--ph6l);color:var(--ph6d)">🏁 Entrega</span>
+      <span class="chv">▶</span>
+    </div>
+    <div class="wcb">
+      <div class="tg">
+        <div class="tgl" style="color:var(--al)">División del trabajo (paralelo)</div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--m1l);color:var(--m1)">M1</span><div class="tt">README de firmware: circuito final (foto), tabla de pines HC-SR501, descripción de la máquina de estados, código comentado.</div></div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--m2l);color:var(--m2)">M2</span><div class="tt">README de backend: arquitectura Firebase, schema RTDB, Cloud Functions, FCM, IFTTT, reglas de seguridad.</div></div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--m3l);color:var(--m3)">M3</span><div class="tt">README de app/simulados: capturas de pantalla, flujos de usuario, instrucciones de instalación (Expo Go QR).</div></div>
+      </div>
+      <div class="tg">
+        <div class="tgl" style="color:var(--al)">Demo final</div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--all);color:var(--al)">TODOS</span><div class="tt">Repo GitHub limpio: <code>main</code> merge final, <code>secrets.h</code> en .gitignore, README principal completo con instrucciones de setup.</div></div>
+        <div class="tr"><input type="checkbox" onchange="upd()"><span class="tag" style="background:var(--all);color:var(--al)">TODOS</span><div class="tt">Ensayo del demo en vivo. Usar hotspot del teléfono si el WiFi de la clase es lento. Plan B: video grabado en S9.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STACK -->
+  <div class="ph" style="margin-top:32px">
+    <div class="ph-dot" style="background:#475569"></div>
+    <h2>Stack tecnológico <span class="changed">PIR v1.1</span></h2>
+  </div>
+  <div class="tgrid">
+    <div class="tc"><h4>Firmware</h4>
+      <div class="ti">Sensor: <code>HC-SR501 PIR</code></div>
+      <div class="ti">Lenguaje: <code>C++ / Arduino</code></div>
+      <div class="ti">Librerías: <code>ArduinoJson</code></div>
+      <div class="ti">Sin divisor de voltaje ✓</div>
+    </div>
+    <div class="tc"><h4>Backend · Nube</h4>
+      <div class="ti">DB: <code>Firebase RTDB</code></div>
+      <div class="ti">Push: <code>Firebase FCM</code></div>
+      <div class="ti">Functions: <code>Node.js</code></div>
+      <div class="ti">Auth: <code>Firebase Auth</code></div>
+    </div>
+    <div class="tc"><h4>App Android</h4>
+      <div class="ti">Framework: <code>React Native / Expo</code></div>
+      <div class="ti">Push: <code>expo-notifications</code></div>
+      <div class="ti">Target: <code>Android (Expo Go)</code></div>
+    </div>
+    <div class="tc"><h4>Dispositivos Simulados</h4>
+      <div class="ti">Smartwatch: <code>HTML/JS · SDK</code></div>
+      <div class="ti">Smart TV: <code>HTML/JS · REST poll</code></div>
+      <div class="ti">Asistente: <code>IFTTT + Google</code></div>
+    </div>
+  </div>
+
+</div>
+<footer>FitCore IoT Security v1.1 · HC-SR501 PIR · Proyecto de clase IoT</footer>
+
+<script>
+function tog(id){document.getElementById(id).classList.toggle('open');}
+function upd(){
+  const all=document.querySelectorAll('input[type=checkbox]');
+  const done=document.querySelectorAll('input[type=checkbox]:checked').length;
+  const total=all.length;
+  const pct=total?Math.round(done/total*100):0;
+  document.getElementById('pfill').style.width=pct+'%';
+  document.getElementById('plbl').textContent=pct+' % completado ('+done+'/'+total+' tareas)';
+  document.getElementById('pcnt').textContent=done+'/'+total;
+  const s={};
+  all.forEach((cb,i)=>s['c'+i]=cb.checked);
+  localStorage.setItem('fitcore_rmap_v11',JSON.stringify(s));
+}
+window.addEventListener('load',()=>{
+  const saved=localStorage.getItem('fitcore_rmap_v11');
+  if(saved){
+    const s=JSON.parse(saved);
+    document.querySelectorAll('input[type=checkbox]').forEach((cb,i)=>{if(s['c'+i])cb.checked=true;});
+  }
+  upd();
+  document.getElementById('w1').classList.add('open');
+});
+</script>
+</body>
+</html>
