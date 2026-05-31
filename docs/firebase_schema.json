@@ -1,0 +1,29 @@
+{
+  "_comentario": "FitCore IoT — Firebase Realtime Database schema v1.1 (PIR)",
+
+  "sensor": {
+    "movimiento": false,
+    "alerta": false,
+    "estado": "armado",
+    "timestamp": 0
+  },
+
+  "config": {
+    "armado": true
+  },
+
+  "alertas": {
+    "-NxPushId1": {
+      "tipo": "alerta",
+      "timestamp": 1716200000
+    },
+    "-NxPushId2": {
+      "tipo": "alarma",
+      "timestamp": 1716200004
+    },
+    "-NxPushId3": {
+      "tipo": "despejado",
+      "timestamp": 1716200025
+    }
+  }
+}
