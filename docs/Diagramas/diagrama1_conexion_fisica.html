@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagrama 1 — Conexión física | FitCore IoT Seguridad</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #f5f4f0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px;
+  }
+  h1 { font-size: 20px; font-weight: 600; color: #1a1a1a; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: #666; margin-bottom: 28px; }
+  .diagram-wrap {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    padding: 32px 24px 28px;
+    max-width: 840px;
+    width: 100%;
+  }
+  svg { width: 100%; height: auto; display: block; }
+  .node-teal rect   { fill: #e1f5ee; stroke: #0f6e56; }
+  .node-purple rect { fill: #eeedfe; stroke: #534ab7; }
+  .node-coral rect  { fill: #faece7; stroke: #993c1d; }
+  .node-blue rect   { fill: #e6f1fb; stroke: #185fa5; }
+  .node-green rect  { fill: #eaf3de; stroke: #3b6d11; }
+  .node-gray rect   { fill: #f1efe8; stroke: #888780; stroke-dasharray: 6 3; }
+  .nt-teal   { fill: #085041; font-weight: 600; }
+  .nt-purple { fill: #3c3489; font-weight: 600; }
+  .nt-coral  { fill: #712b13; font-weight: 600; }
+  .nt-blue   { fill: #0c447c; font-weight: 600; }
+  .nt-green  { fill: #27500a; font-weight: 600; }
+  .nt-gray   { fill: #444441; font-weight: 600; }
+  .ns-teal   { fill: #0f6e56; } .ns-purple { fill: #534ab7; }
+  .ns-coral  { fill: #993c1d; } .ns-blue   { fill: #185fa5; }
+  .ns-green  { fill: #3b6d11; } .ns-gray   { fill: #5f5e5a; }
+  .lpin  { fill: #444; font-size: 11px; }
+  .lproto { fill: #555; font-size: 11px; }
+  .arrow { stroke: #888; stroke-width: 1.2; fill: none; }
+  .note  { fill: #b45309; font-size: 10.5px; }
+  text { font-family: 'Segoe UI', system-ui, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Diagrama 1 — Conexión física</h1>
+<p class="subtitle">Sistema IoT de seguridad · NodeMCU ESP8266 + HC-SR501 PIR · v1.1</p>
+<div class="diagram-wrap">
+<svg viewBox="0 0 760 480">
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#888" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <!-- HC-SR501 PIR -->
+  <g class="node-teal">
+    <rect x="28" y="44" width="148" height="68" rx="9"/>
+    <text x="102" y="68" text-anchor="middle" font-size="13.5" class="nt-teal">HC-SR501 PIR</text>
+    <text x="102" y="85" text-anchor="middle" font-size="11" class="ns-teal">Sensor de movimiento</text>
+    <text x="102" y="101" text-anchor="middle" font-size="10" class="ns-teal">Sin divisor de voltaje</text>
+  </g>
+
+  <!-- Pin label -->
+  <text x="208" y="64" text-anchor="middle" class="lpin">VCC→VIN</text>
+  <text x="208" y="76" text-anchor="middle" class="lpin">OUT→D2</text>
+  <line x1="176" y1="78" x2="244" y2="78" class="arrow" marker-end="url(#ah)"/>
+
+  <!-- NodeMCU ESP8266 -->
+  <g class="node-purple">
+    <rect x="246" y="44" width="158" height="68" rx="9"/>
+    <text x="325" y="72" text-anchor="middle" font-size="13.5" class="nt-purple">NodeMCU ESP8266</text>
+    <text x="325" y="89" text-anchor="middle" font-size="11" class="ns-purple">MCU + WiFi</text>
+    <text x="325" y="105" text-anchor="middle" font-size="10" class="ns-purple">C++ / Arduino IDE</text>
+  </g>
+
+  <!-- Pin label D5 -->
+  <text x="435" y="64" text-anchor="middle" class="lpin">D5</text>
+  <line x1="404" y1="78" x2="468" y2="78" class="arrow" marker-end="url(#ah)"/>
+
+  <!-- Buzzer -->
+  <g class="node-coral">
+    <rect x="470" y="44" width="148" height="68" rx="9"/>
+    <text x="544" y="72" text-anchor="middle" font-size="14" class="nt-coral">Buzzer</text>
+    <text x="544" y="89" text-anchor="middle" font-size="11" class="ns-coral">Actuador de alarma</text>
+    <text x="544" y="105" text-anchor="middle" font-size="10" class="ns-coral">Señal digital 3.3 V</text>
+  </g>
+
+  <!-- Nota simplificación -->
+  <rect x="28" y="124" width="590" height="20" rx="5" fill="#fef3c7" stroke="#d97706" stroke-width="0.8"/>
+  <text x="38" y="137" class="note">✓ Simplificación v1.1: el HC-SR501 no requiere divisor de voltaje — su pin OUT es directamente compatible con 3.3 V del ESP8266</text>
+
+  <!-- WiFi link -->
+  <line x1="325" y1="112" x2="325" y2="220" class="arrow" marker-end="url(#ah)"/>
+  <text x="336" y="155" text-anchor="start" class="lproto">WiFi 802.11 b/g/n · HTTPS</text>
+
+  <!-- Firebase -->
+  <g class="node-blue">
+    <rect x="244" y="222" width="162" height="58" rx="9"/>
+    <text x="325" y="247" text-anchor="middle" font-size="14" class="nt-blue">Firebase RTDB</text>
+    <text x="325" y="265" text-anchor="middle" font-size="11" class="ns-blue">Base de datos nube</text>
+  </g>
+
+  <!-- Fan arrows -->
+  <line x1="325" y1="280" x2="110" y2="334" class="arrow" marker-end="url(#ah)"/>
+  <line x1="325" y1="280" x2="268" y2="334" class="arrow" marker-end="url(#ah)"/>
+  <line x1="325" y1="280" x2="430" y2="334" class="arrow" marker-end="url(#ah)"/>
+  <line x1="325" y1="280" x2="592" y2="334" class="arrow" marker-end="url(#ah)"/>
+
+  <!-- Devices -->
+  <g class="node-green">
+    <rect x="40" y="334" width="140" height="58" rx="9"/>
+    <text x="110" y="358" text-anchor="middle" font-size="13" class="nt-green">App móvil</text>
+    <text x="110" y="376" text-anchor="middle" font-size="10" class="ns-green">Física · Android</text>
+  </g>
+  <g class="node-gray">
+    <rect x="198" y="334" width="140" height="58" rx="9"/>
+    <text x="268" y="358" text-anchor="middle" font-size="13" class="nt-gray">Smartwatch</text>
+    <text x="268" y="376" text-anchor="middle" font-size="10" class="ns-gray">Simulado</text>
+  </g>
+  <g class="node-gray">
+    <rect x="360" y="334" width="140" height="58" rx="9"/>
+    <text x="430" y="358" text-anchor="middle" font-size="13" class="nt-gray">Smart TV</text>
+    <text x="430" y="376" text-anchor="middle" font-size="10" class="ns-gray">Simulado</text>
+  </g>
+  <g class="node-gray">
+    <rect x="518" y="334" width="150" height="58" rx="9"/>
+    <text x="593" y="358" text-anchor="middle" font-size="13" class="nt-gray">Asistente voz</text>
+    <text x="593" y="376" text-anchor="middle" font-size="10" class="ns-gray">Simulado</text>
+  </g>
+
+  <!-- Legend -->
+  <rect x="170" y="414" width="13" height="13" rx="3" fill="#eaf3de" stroke="#3b6d11"/>
+  <text x="189" y="424" font-size="11" fill="#555">Dispositivo físico</text>
+  <rect x="340" y="414" width="13" height="13" rx="3" fill="#f1efe8" stroke="#888780" stroke-dasharray="5 3"/>
+  <text x="359" y="424" font-size="11" fill="#555">Simulado (software)</text>
+</svg>
+</div>
+</body>
+</html>

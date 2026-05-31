@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diagrama 2 — Comunicación | FitCore IoT Seguridad</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #f5f4f0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px;
+  }
+  h1 { font-size: 20px; font-weight: 600; color: #1a1a1a; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: #666; margin-bottom: 28px; }
+  .diagram-wrap {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    padding: 32px 24px 28px;
+    max-width: 840px;
+    width: 100%;
+  }
+  svg { width: 100%; height: auto; display: block; }
+  .node-teal rect   { fill: #e1f5ee; stroke: #0f6e56; }
+  .node-purple rect { fill: #eeedfe; stroke: #534ab7; }
+  .node-coral rect  { fill: #faece7; stroke: #993c1d; }
+  .node-blue rect   { fill: #e6f1fb; stroke: #185fa5; }
+  .node-green rect  { fill: #eaf3de; stroke: #3b6d11; }
+  .node-gray rect   { fill: #f1efe8; stroke: #888780; stroke-dasharray: 6 3; }
+  .nt-teal   { fill: #085041; font-weight: 600; }
+  .nt-purple { fill: #3c3489; font-weight: 600; }
+  .nt-coral  { fill: #712b13; font-weight: 600; }
+  .nt-blue   { fill: #0c447c; font-weight: 600; }
+  .nt-green  { fill: #27500a; font-weight: 600; }
+  .nt-gray   { fill: #444441; font-weight: 600; }
+  .ns-teal   { fill: #0f6e56; } .ns-purple { fill: #534ab7; }
+  .ns-coral  { fill: #993c1d; } .ns-blue   { fill: #185fa5; }
+  .ns-green  { fill: #3b6d11; } .ns-gray   { fill: #5f5e5a; }
+  .arrow { stroke: #888; stroke-width: 1.2; fill: none; }
+  .lproto { fill: #334; font-size: 11px; font-style: italic; }
+  .json-box rect { fill: #fafaf8; stroke: #ccc; }
+  .jh  { fill: #444; font-size: 11px; font-weight: 600; }
+  .jl  { fill: #334; font-size: 11.5px; font-family: 'Consolas','Courier New',monospace; }
+  .jk  { fill: #185fa5; }
+  .jvb { fill: #993c1d; }
+  .jvs { fill: #3b6d11; }
+  .jp  { fill: #666; }
+  .note { fill: #b45309; font-size: 10.5px; }
+  text { font-family: 'Segoe UI', system-ui, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Diagrama 2 — Protocolo de comunicación</h1>
+<p class="subtitle">Protocolos · APIs · Lenguajes · Payload JSON · NodeMCU ESP8266 + HC-SR501 PIR · v1.1</p>
+<div class="diagram-wrap">
+<svg viewBox="0 0 760 560">
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#888" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <!-- HC-SR501 PIR -->
+  <g class="node-teal">
+    <rect x="28" y="44" width="148" height="68" rx="9"/>
+    <text x="102" y="68" text-anchor="middle" font-size="13" class="nt-teal">HC-SR501 PIR</text>
+    <text x="102" y="84" text-anchor="middle" font-size="10.5" class="ns-teal">GPIO · señal digital</text>
+    <text x="102" y="100" text-anchor="middle" font-size="10" class="ns-teal">HIGH / LOW · 3.3 V</text>
+  </g>
+
+  <text x="208" y="68" text-anchor="middle" class="lproto">GPIO</text>
+  <text x="208" y="80" text-anchor="middle" class="lproto">digital</text>
+  <line x1="176" y1="78" x2="244" y2="78" class="arrow" marker-end="url(#ah)"/>
+
+  <!-- NodeMCU -->
+  <g class="node-purple">
+    <rect x="246" y="44" width="158" height="68" rx="9"/>
+    <text x="325" y="68" text-anchor="middle" font-size="13.5" class="nt-purple">NodeMCU ESP8266</text>
+    <text x="325" y="84" text-anchor="middle" font-size="10.5" class="ns-purple">C++ · Arduino IDE</text>
+    <text x="325" y="100" text-anchor="middle" font-size="10" class="ns-purple">HTTPS POST · ArduinoJson</text>
+  </g>
+
+  <text x="435" y="68" text-anchor="middle" class="lproto">GPIO</text>
+  <text x="435" y="80" text-anchor="middle" class="lproto">digital</text>
+  <line x1="404" y1="78" x2="468" y2="78" class="arrow" marker-end="url(#ah)"/>
+
+  <!-- Buzzer -->
+  <g class="node-coral">
+    <rect x="470" y="44" width="148" height="68" rx="9"/>
+    <text x="544" y="68" text-anchor="middle" font-size="14" class="nt-coral">Buzzer</text>
+    <text x="544" y="84" text-anchor="middle" font-size="10.5" class="ns-coral">Salida digital</text>
+    <text x="544" y="100" text-anchor="middle" font-size="10" class="ns-coral">HIGH = ON · 3.3 V</text>
+  </g>
+
+  <!-- Nota -->
+  <rect x="28" y="124" width="590" height="20" rx="5" fill="#fef3c7" stroke="#d97706" stroke-width="0.8"/>
+  <text x="38" y="137" class="note">✓ v1.1 — El PIR envía HIGH (movimiento) / LOW (sin movimiento). Sin cálculo de distancia. Payload simplificado a campo booleano "movimiento".</text>
+
+  <!-- WiFi link -->
+  <line x1="325" y1="112" x2="325" y2="228" class="arrow" marker-end="url(#ah)"/>
+  <text x="336" y="153" text-anchor="start" class="lproto">HTTPS POST · JSON</text>
+  <text x="336" y="170" text-anchor="start" class="lproto">Puerto 443 · REST API</text>
+
+  <!-- Firebase -->
+  <g class="node-blue">
+    <rect x="244" y="230" width="162" height="58" rx="9"/>
+    <text x="325" y="255" text-anchor="middle" font-size="14" class="nt-blue">Firebase RTDB</text>
+    <text x="325" y="273" text-anchor="middle" font-size="10.5" class="ns-blue">SDK · REST · FCM · JSON</text>
+  </g>
+
+  <!-- Fan -->
+  <line x1="325" y1="288" x2="110" y2="340" class="arrow" marker-end="url(#ah)"/>
+  <line x1="325" y1="288" x2="268" y2="340" class="arrow" marker-end="url(#ah)"/>
+  <line x1="325" y1="288" x2="430" y2="340" class="arrow" marker-end="url(#ah)"/>
+  <line x1="325" y1="288" x2="593" y2="340" class="arrow" marker-end="url(#ah)"/>
+
+  <!-- Devices -->
+  <g class="node-green">
+    <rect x="40" y="340" width="140" height="68" rx="9"/>
+    <text x="110" y="361" text-anchor="middle" font-size="13" class="nt-green">App móvil</text>
+    <text x="110" y="377" text-anchor="middle" font-size="10" class="ns-green">FCM Push</text>
+    <text x="110" y="392" text-anchor="middle" font-size="10" class="ns-green">React Native · JS</text>
+    <text x="110" y="401" text-anchor="middle" font-size="10" fill="#888">Física · Android</text>
+  </g>
+  <g class="node-gray">
+    <rect x="198" y="340" width="140" height="68" rx="9"/>
+    <text x="268" y="361" text-anchor="middle" font-size="13" class="nt-gray">Smartwatch</text>
+    <text x="268" y="377" text-anchor="middle" font-size="10" class="ns-gray">WebSocket</text>
+    <text x="268" y="392" text-anchor="middle" font-size="10" class="ns-gray">HTML / JavaScript</text>
+    <text x="268" y="401" text-anchor="middle" font-size="10" fill="#888">Simulado</text>
+  </g>
+  <g class="node-gray">
+    <rect x="360" y="340" width="140" height="68" rx="9"/>
+    <text x="430" y="361" text-anchor="middle" font-size="13" class="nt-gray">Smart TV</text>
+    <text x="430" y="377" text-anchor="middle" font-size="10" class="ns-gray">REST API polling</text>
+    <text x="430" y="392" text-anchor="middle" font-size="10" class="ns-gray">HTML / JavaScript</text>
+    <text x="430" y="401" text-anchor="middle" font-size="10" fill="#888">Simulado</text>
+  </g>
+  <g class="node-gray">
+    <rect x="518" y="340" width="150" height="68" rx="9"/>
+    <text x="593" y="361" text-anchor="middle" font-size="13" class="nt-gray">Asistente voz</text>
+    <text x="593" y="377" text-anchor="middle" font-size="10" class="ns-gray">IFTTT Webhook</text>
+    <text x="593" y="392" text-anchor="middle" font-size="10" class="ns-gray">Google Assistant</text>
+    <text x="593" y="401" text-anchor="middle" font-size="10" fill="#888">Simulado</text>
+  </g>
+
+  <!-- JSON payload -->
+  <g class="json-box">
+    <rect x="60" y="428" width="630" height="118" rx="10"/>
+  </g>
+  <text x="375" y="446" text-anchor="middle" class="jh">Payload JSON — ESP8266 → Firebase RTDB (cada 1 s)</text>
+
+  <text x="90" y="523" class="jl jp">{</text>
+  <text x="108" y="538" class="jl"><tspan class="jk">"movimiento"</tspan><tspan class="jp">: </tspan><tspan class="jvb">true</tspan><tspan class="jp">,</tspan>
+  </text>
+  <text x="108" y="493" class="jl"><tspan class="jk">"estado"</tspan><tspan class="jp">: </tspan><tspan class="jvs">"alarma"</tspan><tspan class="jp">,</tspan>
+  </text>
+  <text x="108" y="508" class="jl"><tspan class="jk">"alerta"</tspan><tspan class="jp">: </tspan><tspan class="jvb">true</tspan><tspan class="jp">,</tspan>
+  </text>
+  <text x="108" y="523" class="jl"><tspan class="jk">"timestamp"</tspan><tspan class="jp">: </tspan><tspan class="jvb">1716200004</tspan>
+  </text>
+  <text x="90" y="538" class="jl jp">}</text>
+</svg>
+</div>
+</body>
+</html>
