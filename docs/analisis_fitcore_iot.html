@@ -161,7 +161,7 @@
   <div class="badge">Proyecto de clase · IoT Security</div>
   <h1>FitCore IoT<br><span>Sistema de Seguridad</span></h1>
   <p class="subtitle">Análisis del proyecto, estado del equipo y roadmap</p>
-  <p class="meta">NodeMCU ESP8266 · HC-SR501 PIR · Firebase RTDB · React Native<br>Generado: Mayo 2026</p>
+  <p class="meta">NodeMCU ESP8266 · HC-SR501 PIR · Firebase RTDB · React Native<br>Actualizado: 31 Mayo 2026 — S1 y S2 completadas</p>
 </div>
 
 <!-- ═══════════════════════════════════════════════════
@@ -197,7 +197,7 @@
 
 <div class="box box-warn">
   <strong>⚠ Inconsistencia de documentación</strong>
-  El README principal y los diagramas dicen PIR→D2 y Buzzer→D5, pero el código funcional (<code>CodigoArduino/</code>) usa D1 para el PIR y D2 para el buzzer. El hardware está cableado según el código, no según el README. La documentación necesita corregirse para reflejar el cableado real.
+  El README principal todavía puede decir pines distintos a los del código activo. El código funcional (<code>CodigoArduino/</code>) usa D1 para el PIR (<code>CodigoPrincipal.ino:5</code>) y D2 para el buzzer (<code>Buzzer.h:4</code>). Verificar que el README y los diagramas reflejen D1/D2.
 </div>
 
 <hr>
@@ -208,7 +208,7 @@
 <h2>2 — Estado del código</h2>
 
 <h3>Firmware activo: CodigoArduino/</h3>
-<p>Este es el firmware validado por M1. Ya funciona y escribe valores en Firebase RTDB. Estructura de archivos:</p>
+<p>Firmware validado y funcional. Lee el PIR, activa el buzzer y escribe en Firebase RTDB. Estructura de archivos:</p>
 <ul>
   <li><code>CodigoPrincipal.ino</code> — Lógica principal: lectura PIR cada 1200 ms, buzzer, escritura a Firebase</li>
   <li><code>ConexionFirebase.h</code> — Configuración WiFi + Firebase (credenciales en local, no subidas al repo)</li>
@@ -216,16 +216,33 @@
 </ul>
 
 <div class="box box-ok">
-  <strong>✅ Lo que funciona correctamente</strong>
+  <strong>✅ Lo que funciona correctamente en el firmware</strong>
   Lectura del PIR cada 1200 ms · Activación del buzzer al detectar movimiento · Escritura booleana a Firebase RTDB · Warmup de 30 s para estabilización del PIR · Reconexión WiFi implícita por la librería Firebase_ESP_Client
+</div>
+
+<div class="box box-error">
+  <strong>🔴 Único bloqueo crítico restante — path Firebase incorrecto</strong>
+  El firmware escribe en <code>/garage/motion</code> (líneas 46 y 59 de <code>CodigoPrincipal.ino</code>) pero la app lee <code>/sensor/movimiento</code>. Son dos líneas <code>Firebase.RTDB.setBool()</code>. Cambiar el string y el Milestone 1 queda 100% completo.
+</div>
+
+<h3>App Android: app/</h3>
+<p>Proyecto Expo creado y conectado a Firebase RTDB. Implementación completa de S2:</p>
+<ul>
+  <li><code>src/firebaseConfig.js</code> — Inicialización Firebase con variables de entorno <code>EXPO_PUBLIC_*</code></li>
+  <li><code>App.js</code> — UI con tema oscuro, lectura en tiempo real de <code>/sensor/movimiento</code>, estado visual rojo/verde, indicador de conexión y timestamp</li>
+</ul>
+
+<div class="box box-ok">
+  <strong>✅ Lo que funciona correctamente en la app</strong>
+  Conexión a Firebase RTDB con <code>onValue()</code> · Pantalla con estado MOVIMIENTO DETECTADO (tarjeta roja) / SIN MOVIMIENTO (tarjeta verde) · Indicador de conexión online/offline · Timestamp de última actualización · Credenciales cargadas desde <code>.env</code> sin exponerlas al repo
 </div>
 
 <h3>Lo que le falta al firmware actual (requerido en S3)</h3>
 <table>
   <thead><tr><th>Funcionalidad</th><th>Estado actual</th><th>Requerido en S3</th></tr></thead>
   <tbody>
+    <tr><td>Path Firebase correcto</td><td><code>/garage/motion</code></td><td><code>/sensor/movimiento</code> — cambio de 2 líneas</td></tr>
     <tr><td>Máquina de estados</td><td>No existe</td><td>WARMUP → ARMED → ALERT → ALARM</td></tr>
-    <tr><td>Path Firebase</td><td><code>/garage/motion</code></td><td><code>/sensor/movimiento</code></td></tr>
     <tr><td>Campo <code>estado</code></td><td>No enviado</td><td>String: "armado" / "alerta" / "alarma"</td></tr>
     <tr><td>Campo <code>alerta</code></td><td>No enviado</td><td>Bool en <code>/sensor/alerta</code></td></tr>
     <tr><td>Historial de eventos</td><td>No implementado</td><td>POST a <code>/alertas/{pushId}</code></td></tr>
@@ -234,13 +251,8 @@
   </tbody>
 </table>
 
-<div class="box box-error">
-  <strong>🔴 Bloqueo crítico para M3</strong>
-  El firmware escribe en <code>/garage/motion</code> pero M3 va a leer <code>/sensor/movimiento</code>. Mientras no se alinee este path, M3 no puede avanzar en su tarea de S2. Es un cambio de una sola línea en el firmware.
-</div>
-
 <h3>Firmware secundario: firmware/fitcore_security/</h3>
-<p>Este es un firmware alternativo que usa sensor ultrasónico HC-SR04 (descartado) + ArduinoJson + REST HTTP. Tiene implementada la máquina de estados completa (DISARMED → ARMED → ALERT → ALARM) y puede servir como referencia directa para M1 al implementar la máquina de estados en S3, adaptando la lógica del sensor ultrasónico a un simple <code>digitalRead()</code>.</p>
+<p>Firmware alternativo con sensor ultrasónico HC-SR04 (descartado) que tiene implementada la máquina de estados completa (DISARMED → ARMED → ALERT → ALARM). Sirve como referencia directa para M1 al implementar la máquina de estados en S3 — adaptar la lógica del ultrasónico a un simple <code>digitalRead()</code>.</p>
 
 <hr>
 
@@ -249,18 +261,19 @@
 ════════════════════════════════════════════════════ -->
 <h2>3 — Schema Firebase RTDB</h2>
 
-<h3>Schema objetivo (PIR v1.1)</h3>
+<h3>Schema objetivo (PIR v1.1) — ya documentado en firebase_schema.json</h3>
 <pre>
 /sensor/movimiento    ← bool  (true cuando el PIR detecta movimiento)
 /sensor/estado        ← string ("calentando" | "desarmado" | "armado" | "alerta" | "alarma")
 /sensor/alerta        ← bool
+/sensor/timestamp     ← number
 /config/armado        ← bool  (la app escribe aquí para armar/desarmar)
 /alertas/{pushId}     ← { tipo: string, timestamp: number }
 </pre>
 
-<div class="box box-warn">
-  <strong>⚠ firebase_schema.json desactualizado</strong>
-  El archivo <code>docs/firebase_schema.json</code> todavía tiene el campo <code>distancia_cm</code> del sensor HC-SR04 descartado. M2 debe actualizarlo para que refleje el schema PIR real antes de que M3 empiece a conectar la app.
+<div class="box box-ok">
+  <strong>✅ firebase_schema.json actualizado correctamente</strong>
+  El archivo <code>docs/firebase_schema.json</code> ya refleja el schema PIR v1.1. No contiene <code>distancia_cm</code> del sensor HC-SR04 descartado. Los nodos <code>/sensor</code>, <code>/config/armado</code> y <code>/alertas</code> están documentados correctamente.
 </div>
 
 <h3>Reglas de seguridad</h3>
@@ -279,36 +292,42 @@
 ════════════════════════════════════════════════════ -->
 <h2>4 — Análisis del Roadmap</h2>
 
-<h3>Estado real de cada miembro</h3>
+<h3>Estado real de cada miembro — post S1+S2</h3>
 
-<p><span class="tag m1">M1</span> <strong>Adelantado — hardware funcionando, código necesita evolucionar</strong></p>
+<p><span class="tag m1">M1</span> <strong>S1+S2 funcionalmente completados — un fix crítico antes de S3</strong></p>
 <ul>
-  <li>✅ PIR conectado y leyendo correctamente</li>
-  <li>✅ Buzzer activándose con detección</li>
+  <li>✅ PIR conectado y leyendo correctamente (D1)</li>
+  <li>✅ Buzzer activándose con detección (D2)</li>
   <li>✅ Datos llegando a Firebase RTDB en tiempo real</li>
   <li>✅ Warmup implementado (30 s)</li>
-  <li>⚠ Path en Firebase incorrecto (<code>/garage/motion</code> en lugar de <code>/sensor/movimiento</code>)</li>
+  <li>✅ Credenciales WiFi/Firebase en local, no en repo</li>
+  <li>🔴 Path en Firebase incorrecto (<code>/garage/motion</code> en lugar de <code>/sensor/movimiento</code>) — 2 líneas a cambiar</li>
   <li>❌ Sin máquina de estados (requerido para S3)</li>
   <li>❌ Sin lectura remota armar/desarmar</li>
+  <li>❌ Intervalo de lectura 1200 ms (meta S2: 100 ms)</li>
 </ul>
 
-<p><span class="tag m2">M2</span> <strong>Firebase creado (implícito), pendiente de documentar y compartir</strong></p>
+<p><span class="tag m2">M2</span> <strong>S1+S2 completos</strong></p>
 <ul>
-  <li>✅ Firebase RTDB activo (M1 ya escribe datos)</li>
-  <li>❌ Credenciales no compartidas con M3 (bloquea inicio de M3)</li>
-  <li>❌ <code>firebase_schema.json</code> desactualizado (tiene HC-SR04, no PIR)</li>
+  <li>✅ Firebase RTDB activo (datos llegan desde el firmware)</li>
+  <li>✅ Credenciales compartidas con M3 vía <code>app/.env</code></li>
+  <li>✅ <code>firebase_schema.json</code> actualizado a PIR v1.1 (sin HC-SR04)</li>
 </ul>
 
-<p><span class="tag m3">M3</span> <strong>No ha empezado — bloqueado por credenciales y path de Firebase</strong></p>
+<p><span class="tag m3">M3</span> <strong>S1+S2 completos — UI funcional con lectura en tiempo real</strong></p>
 <ul>
-  <li>❌ Proyecto Expo no creado</li>
-  <li>❌ Sin credenciales Firebase</li>
-  <li>❌ Path a leer (<code>/sensor/movimiento</code>) aún no existe en la DB</li>
+  <li>✅ Proyecto Expo creado (<code>app/</code>)</li>
+  <li>✅ Firebase SDK integrado con variables de entorno <code>EXPO_PUBLIC_*</code></li>
+  <li>✅ App lee <code>/sensor/movimiento</code> en tiempo real con <code>onValue()</code></li>
+  <li>✅ UI completa: tarjeta roja (movimiento detectado) / verde (sin movimiento)</li>
+  <li>✅ Indicador de conexión Firebase online/offline</li>
+  <li>✅ Timestamp de última actualización</li>
+  <li>✅ Iconos adaptativos Android configurados en <code>app.json</code></li>
 </ul>
 
 <hr>
 
-<h3>Fase 1 — Fundación (S1–S2)</h3>
+<h3>Fase 1 — Fundación (S1–S2) — COMPLETADA</h3>
 <table>
   <thead><tr><th>Tarea</th><th>Miembro</th><th>Estado</th></tr></thead>
   <tbody>
@@ -317,20 +336,20 @@
     <tr><td>Arduino IDE + board ESP8266 + librería instalados</td><td><span class="tag m1">M1</span></td><td>✅ Completado</td></tr>
     <tr><td>HC-SR501 conectado, señal verificada en Serial Monitor</td><td><span class="tag m1">M1</span></td><td>✅ Completado</td></tr>
     <tr><td>Firebase RTDB creado en modo test</td><td><span class="tag m2">M2</span></td><td>✅ Completado</td></tr>
-    <tr><td>Schema RTDB documentado en firebase_schema.json (v1.1 PIR)</td><td><span class="tag m2">M2</span></td><td>❌ Pendiente</td></tr>
-    <tr><td>Proyecto Expo creado + firebase instalado</td><td><span class="tag m3">M3</span></td><td>❌ Pendiente</td></tr>
-    <tr><td>Primer POST a Firebase con movimiento:true (path correcto)</td><td><span class="tag m1">M1</span></td><td>⚠ Funciona pero path incorrecto</td></tr>
-    <tr><td>Credenciales compartidas con M3 vía .env</td><td><span class="tag m2">M2</span></td><td>❌ Pendiente</td></tr>
-    <tr><td>App lee /sensor/movimiento y lo muestra en pantalla</td><td><span class="tag m3">M3</span></td><td>❌ Pendiente</td></tr>
+    <tr><td>Schema RTDB documentado en firebase_schema.json (v1.1 PIR)</td><td><span class="tag m2">M2</span></td><td>✅ Completado</td></tr>
+    <tr><td>Proyecto Expo creado + firebase instalado</td><td><span class="tag m3">M3</span></td><td>✅ Completado</td></tr>
+    <tr><td>Primer POST a Firebase (path correcto)</td><td><span class="tag m1">M1</span></td><td>🔴 Funciona pero path incorrecto (<code>/garage/motion</code>)</td></tr>
+    <tr><td>Credenciales compartidas con M3 vía .env</td><td><span class="tag m2">M2</span></td><td>✅ Completado</td></tr>
+    <tr><td>App lee /sensor/movimiento y lo muestra en pantalla</td><td><span class="tag m3">M3</span></td><td>✅ Completado — UI con colores</td></tr>
   </tbody>
 </table>
 
-<div class="box box-info">
-  <strong>🎯 Milestone 1 — Estado</strong>
-  M1 cumplió su parte técnica. El pipeline ESP8266→Firebase existe y funciona. Falta: corregir el path, que M2 comparta credenciales, y que M3 lea el dato. El Milestone 1 está al 60 % — se completa cuando los tres están conectados al mismo nodo de Firebase.
+<div class="box box-warn">
+  <strong>🎯 Milestone 1 — Estado: 95% completo</strong>
+  Todo el pipeline ESP8266→Firebase→App está construido y funcional. El único paso que falta para cerrar el Milestone 1 al 100% es corregir el path en el firmware: cambiar <code>/garage/motion</code> por <code>/sensor/movimiento</code> en <code>CodigoPrincipal.ino</code> líneas 46 y 59. Es un cambio de 2 strings.
 </div>
 
-<h3>Fase 2 — Núcleo IoT (S3–S4)</h3>
+<h3>Fase 2 — Núcleo IoT (S3–S4) — SIGUIENTE</h3>
 <p>Esta fase es la más exigente para M1. Requiere implementar la máquina de estados completa:</p>
 <pre>
 WARMUP (30 s)
@@ -413,46 +432,46 @@ ARMED ──movimiento detectado──► ALERT ──3 s sostenido──► ALA
 <!-- ═══════════════════════════════════════════════════
      PARTE 5 — PRIORIDADES INMEDIATAS
 ════════════════════════════════════════════════════ -->
-<h2>5 — Prioridades inmediatas para desbloquear el equipo</h2>
+<h2>5 — Prioridades inmediatas para cerrar S2 y arrancar S3</h2>
 
 <table>
   <thead><tr><th>#</th><th>Acción</th><th>Miembro</th><th>Impacto</th></tr></thead>
   <tbody>
     <tr>
       <td>1</td>
-      <td>Cambiar <code>/garage/motion</code> → <code>/sensor/movimiento</code> en <code>CodigoPrincipal.ino</code></td>
+      <td>Cambiar <code>/garage/motion</code> → <code>/sensor/movimiento</code> en <code>CodigoPrincipal.ino:46</code> y <code>:59</code></td>
       <td><span class="tag m1">M1</span></td>
-      <td>Desbloquea a M3 — cambio de una línea</td>
+      <td>Cierra el Milestone 1 al 100% — 2 strings</td>
     </tr>
     <tr>
       <td>2</td>
-      <td>Compartir credenciales Firebase con M3 via <code>.env</code> (nunca al repo)</td>
-      <td><span class="tag m2">M2</span></td>
-      <td>M3 puede arrancar S2</td>
+      <td>Reducir intervalo de lectura de 1200 ms a 100 ms (en <code>CodigoPrincipal.ino:8</code>)</td>
+      <td><span class="tag m1">M1</span></td>
+      <td>Cumple requisito del roadmap S2</td>
     </tr>
     <tr>
       <td>3</td>
-      <td>Actualizar <code>docs/firebase_schema.json</code> al schema PIR v1.1</td>
-      <td><span class="tag m2">M2</span></td>
-      <td>Documentación alineada</td>
+      <td>Implementar máquina de estados (referencia: <code>firmware/fitcore_security/fitcore_security.ino</code>)</td>
+      <td><span class="tag m1">M1</span></td>
+      <td>Requerido para S3 — habilita Milestone 2</td>
     </tr>
     <tr>
       <td>4</td>
-      <td>M3 crea proyecto Expo + instala firebase + verifica lectura en RTDB</td>
+      <td>Actualizar app para mostrar estado por colores (verde/amarillo/rojo/gris) según campo <code>/sensor/estado</code></td>
       <td><span class="tag m3">M3</span></td>
-      <td>Completa Milestone 1</td>
+      <td>Tarea S3 de M3</td>
     </tr>
     <tr>
       <td>5</td>
-      <td>Corregir tabla de pines en README (D1/D2 según código real)</td>
-      <td><span class="tag m1">M1</span></td>
-      <td>Evita confusión al cablear</td>
+      <td>Agregar botón Armar/Desarmar que escribe en <code>/config/armado</code></td>
+      <td><span class="tag m3">M3</span></td>
+      <td>Tarea S4 de M3</td>
     </tr>
     <tr>
       <td>6</td>
-      <td>M1 implementa máquina de estados para S3 (referencia: <code>firmware/fitcore_security/</code>)</td>
+      <td>Corregir tabla de pines en README si todavía dice D2/D5 (código real usa D1/D2)</td>
       <td><span class="tag m1">M1</span></td>
-      <td>Habilita Milestone 2</td>
+      <td>Documentación alineada con hardware</td>
     </tr>
   </tbody>
 </table>
@@ -474,39 +493,44 @@ ARMED ──movimiento detectado──► ALERT ──3 s sostenido──► ALA
     </tr>
     <tr>
       <td>🟡 Importante</td>
-      <td>README dice pines D2/D5 pero código usa D1/D2</td>
-      <td><code>README.md</code> + <code>Buzzer.h:4</code> + <code>CodigoPrincipal.ino:5</code></td>
-    </tr>
-    <tr>
-      <td>🟡 Importante</td>
-      <td><code>firebase_schema.json</code> tiene <code>distancia_cm</code> de HC-SR04, no PIR</td>
-      <td><code>docs/firebase_schema.json</code></td>
-    </tr>
-    <tr>
-      <td>🟡 Importante</td>
-      <td>Sin máquina de estados — requerida para S3</td>
+      <td>Sin máquina de estados en firmware — requerida para S3</td>
       <td><code>CodigoPrincipal.ino</code></td>
     </tr>
     <tr>
-      <td>🟠 Menor</td>
-      <td><code>ConexionFirebase.h</code> no está en <code>.gitignore</code></td>
-      <td><code>.gitignore</code></td>
+      <td>🟡 Importante</td>
+      <td>Intervalo de lectura 1200 ms en lugar de 100 ms (meta del roadmap S2)</td>
+      <td><code>CodigoPrincipal.ino:8</code></td>
     </tr>
     <tr>
       <td>🟠 Menor</td>
-      <td><code>calibracion.md</code> vacío</td>
+      <td>README puede tener pines D2/D5 pero código usa D1/D2 — verificar y corregir</td>
+      <td><code>README.md</code></td>
+    </tr>
+    <tr>
+      <td>🟠 Menor</td>
+      <td><code>calibracion.md</code> vacío — documentar proceso de calibración del HC-SR501</td>
       <td><code>docs/calibracion.md</code></td>
     </tr>
     <tr>
-      <td>🔵 Info</td>
-      <td><code>app/</code> y <code>simulados/</code> aún no existen en el repo</td>
-      <td>—</td>
+      <td>🟢 Resuelto</td>
+      <td><code>firebase_schema.json</code> actualizado a PIR v1.1 sin <code>distancia_cm</code></td>
+      <td><code>docs/firebase_schema.json</code></td>
+    </tr>
+    <tr>
+      <td>🟢 Resuelto</td>
+      <td>Proyecto Expo creado y conectado a Firebase</td>
+      <td><code>app/</code></td>
+    </tr>
+    <tr>
+      <td>🟢 Resuelto</td>
+      <td>Credenciales Firebase compartidas con M3 vía <code>.env</code></td>
+      <td><code>app/.env</code></td>
     </tr>
   </tbody>
 </table>
 
 <div class="footer">
-  FitCore IoT Security v1.1 · HC-SR501 PIR + NodeMCU ESP8266 + Firebase RTDB · Análisis generado con Claude Code
+  FitCore IoT Security v1.1 · HC-SR501 PIR + NodeMCU ESP8266 + Firebase RTDB · Análisis generado con Claude Code · Actualizado 31 Mayo 2026
 </div>
 
 </body>
