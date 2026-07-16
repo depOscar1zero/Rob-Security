@@ -3,6 +3,8 @@ firmware/fitcore_security/secrets.h
 app/.env
 app/.env.local
 simulados/.env
+smart-tv/.env
+CodigoArduino/secrets.h
 
 # ─── Node / Expo ──────────────────────────────────────────────────────────────
 node_modules/

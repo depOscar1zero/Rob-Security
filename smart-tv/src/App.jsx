@@ -300,9 +300,9 @@ export default function App() {
               </span>
             </div>
             <div style={{ ...S.card, ...S.col, textAlign: "center" }}>
-              <div style={S.label}>Firebase</div>
+              <div style={S.label}>Nube</div>
               <span style={connected ? S.badgeGreen : S.badgeRed}>
-                {connected ? "● OK" : "● SIN CONEXIÓN"}
+                {connected ? "● EN LÍNEA" : "● DESCONECTADO"}
               </span>
             </div>
             <div style={{ ...S.card, ...S.col, textAlign: "center" }}>
@@ -328,8 +328,8 @@ export default function App() {
       {/* ── PANTALLA 2: MONITOREO ── */}
       {screen === "monitoreo" && (
         <div>
-          <p style={S.screenTitle}>Monitoreo en vivo</p>
-          <p style={S.label}>Estado en tiempo real desde Firebase RTDB</p>
+          <p style={S.screenTitle}>Cámaras y Sensores</p>
+          <p style={S.label}>Estado en tiempo real de tu hogar</p>
 
           {/* Estado principal */}
           <div style={{
@@ -340,10 +340,10 @@ export default function App() {
             <div style={{ fontSize: 48 }}>{detected ? "🚨" : "✅"}</div>
             <div>
               <div style={{ color: C.textPri, fontSize: 20, fontWeight: "700" }}>
-                {detected ? "MOVIMIENTO DETECTADO" : "SIN MOVIMIENTO"}
+                {detected ? "ALERTA EN GARAJE" : "TODO TRANQUILO"}
               </div>
               <div style={{ color: C.textMuted, fontSize: 12, marginTop: 6 }}>
-                Firebase: /sensor/movimiento = {String(motion)}
+                {detected ? "El sensor detectó actividad reciente" : "No hay actividad inusual"}
               </div>
             </div>
           </div>
@@ -351,7 +351,7 @@ export default function App() {
           {/* Métricas */}
           <div style={{ ...S.row, marginBottom: 16 }}>
             <div style={{ ...S.card, ...S.col }}>
-              <div style={S.label}>Sensor PIR</div>
+              <div style={S.label}>Sensor de Mov.</div>
               <div style={{ ...S.value, color: sistemaActivo ? C.green : C.red }}>
                 {sistemaActivo ? "ACTIVO" : "PAUSADO"}
               </div>
@@ -370,35 +370,15 @@ export default function App() {
             </div>
           </div>
 
-          {/* Ruta Firebase */}
-          <div style={{ ...S.cardBlue, fontFamily: "monospace", fontSize: 12 }}>
-            <div style={{ color: C.textMuted, marginBottom: 6 }}>Rutas en Firebase RTDB:</div>
-            <div style={{ color: C.blue }}>
-              /sensor/movimiento → <span style={{ color: detected ? C.red : C.green }}>
-                {String(motion)}
-              </span>
-            </div>
-            <div style={{ color: C.blue }}>
-              /sistema/activo &nbsp;&nbsp;→ <span style={{ color: sistemaActivo ? C.green : C.red }}>
-                {String(sistemaActivo)}
-              </span>
-            </div>
-            <div style={{ color: C.blue }}>
-              /sistema/automatico → <span style={{ color: modoAuto ? C.amber : C.textSec }}>
-                {String(modoAuto)}
-              </span>
-            </div>
-          </div>
-
-          <p style={S.hint}>● Actualizando en tiempo real</p>
+          <p style={S.hint}>● Actualizando en tiempo real de forma segura</p>
         </div>
       )}
 
       {/* ── PANTALLA 3: CONTROL ── */}
       {screen === "control" && (
         <div>
-          <p style={S.screenTitle}>Control del sistema</p>
-          <p style={S.label}>Envía comandos directamente al ESP8266 vía Firebase</p>
+          <p style={S.screenTitle}>Panel de Control</p>
+          <p style={S.label}>Administra las funciones de tu alarma a distancia</p>
 
           {/* Estado actual */}
           <div style={{ ...S.row, marginBottom: 20 }}>
@@ -486,7 +466,7 @@ export default function App() {
           </button>
 
           <p style={S.hint}>
-            Los cambios se envían a Firebase y el ESP8266 los aplica en ~1.2 segundos
+            Los comandos se aplican de forma inmediata
           </p>
         </div>
       )}
@@ -556,21 +536,19 @@ export default function App() {
       {/* ── PANTALLA 5: CONFIGURACIÓN ── */}
       {screen === "config" && (
         <div>
-          <p style={S.screenTitle}>Configuración</p>
-          <p style={S.label}>Información del sistema y conexión</p>
+          <p style={S.screenTitle}>Acerca del Sistema</p>
+          <p style={S.label}>Información general y estado de tus dispositivos</p>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {[
-              { label: "Dispositivo",         value: "ESP8266 NodeMCU",        badge: "badgeBlue"  },
-              { label: "Base de datos",        value: "Firebase RTDB",          badge: "badgeBlue"  },
-              { label: "Intervalo de lectura", value: "1200 ms",                badge: "badgeAmber" },
-              { label: "Duración alarma",      value: "10 segundos",            badge: "badgeAmber" },
-              { label: "Sensor PIR",           value: "Pin D1",                 badge: "badgeGreen" },
-              { label: "Buzzer",               value: "Pin D2",                 badge: "badgeGreen" },
-              { label: "Ruta movimiento",      value: "/sensor/movimiento",     badge: "badgeBlue"  },
-              { label: "Ruta sistema",         value: "/sistema/activo",        badge: "badgeBlue"  },
-              { label: "Ruta automático",      value: "/sistema/automatico",    badge: "badgeBlue"  },
-              { label: "Estado Firebase",      value: connected ? "Conectado" : "Sin conexión",
+              { label: "Dispositivo",         value: "Alarma Inteligente",        badge: "badgeBlue"  },
+              { label: "Ubicación",           value: "Garaje",                    badge: "badgeBlue"  },
+              { label: "Sensibilidad",        value: "Alta",                      badge: "badgeAmber" },
+              { label: "Duración de sirena",  value: "10 segundos",               badge: "badgeAmber" },
+              { label: "Sensor de presencia", value: "Activo",                    badge: "badgeGreen" },
+              { label: "Bocina de alerta",    value: "Lista",                     badge: "badgeGreen" },
+              { label: "Conexión a internet", value: "Estable",                   badge: "badgeBlue"  },
+              { label: "Servidor en la nube", value: connected ? "En línea" : "Buscando...",
                 badge: connected ? "badgeGreen" : "badgeRed" },
             ].map((item, i) => (
               <div
@@ -592,7 +570,7 @@ export default function App() {
       <div style={S.footer}>
         <div style={{ ...S.dot, backgroundColor: connected ? C.green : C.red }} />
         <span style={{ color: C.textMuted, fontSize: 12 }}>
-          {connected ? "Firebase conectado" : "Sin conexión"}
+          {connected ? "Sistema en línea" : "Sin conexión"}
         </span>
         {lastUpdate && (
           <span style={{ color: C.textMuted, fontSize: 11, marginLeft: 8 }}>
