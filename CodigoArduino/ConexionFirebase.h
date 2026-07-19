@@ -4,21 +4,7 @@
 #include <ESP8266WiFi.h>
 #include <Firebase_ESP_Client.h>
 
-// ================================
-// Credenciales WiFi
-// ================================
-#define WIFI_SSID "TU_WIFI"
-#define WIFI_PASSWORD "TU_PASSWORD"
-
-// ================================
-// Firebase
-// ================================
-#define API_KEY "TU_API_KEY"
-
-#define DATABASE_URL "TU_DATABASE_URL"
-
-#define USER_EMAIL "TU_CORREO"
-#define USER_PASSWORD "TU_PASSWORD_FIREBASE"
+#include "secrets.h"
 
 // Objetos Firebase
 FirebaseData fbdo;
